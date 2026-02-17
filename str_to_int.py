@@ -15,13 +15,41 @@ def tokenize(string: str) -> list:
         for operador in operadores:
             if word.endswith(operador):
                 word = word[:-len(operador)]
-        l.append(word)
+        if word: l.append(word)
         if word in millares:
             lista.append(l)
             l = []
     if l: lista.append(l)
     return lista
 
+
+def strip(string):
+    for operador in operadores:
+        if string.endswith(operador):
+            string = string[:-len(operador)]
+        if string.startswith(operador):
+            string = string[len(operador):]
+    return string
+
+
+def split(string):
+    tmp = []
+    dec = False
+    for decena in decenas:
+        if string.startswith(decena):
+            tmp.append(decena)
+            string = string[len(decena):]
+            dec = True
+            break
+    if not dec:
+        for unidad in unidades:
+            if string.startswith(unidad):
+                tmp.append(unidad)
+                string = string[len(unidad):]
+                break
+    string = strip(string)
+    tmp.append(string)
+    return tmp
 
 
 def sumar(*args) -> int:
@@ -49,18 +77,16 @@ def multiplica_millar(num, millar):
 
 
 def string_to_int(string:str) -> int:
-    # comprobar sumas como treintaicinco
-
-
-    
     # comprobar unidades, decenas y centenas
     if string in unidades or string in decenas or string in centenas:
         return number_set[string]
-    
-    # comprobar millares
-    
-
-    pass
+    # comprobar sumas como treintaicinco o multiplicaciones como doscientos
+    elif string not in millares:
+        tmp = split(string)
+        if tmp[0] in unidades:
+            return number_set[tmp[0]] * number_set[tmp[1]] # dos * cientos (2 * 100)
+        else:
+            return number_set[tmp[0]] + number_set[tmp[1]] # treinta + cinco (30 + 5)
 
 
 def find_number_name(string:str = "Dos") -> int:
@@ -73,5 +99,29 @@ def find_number_name(string:str = "Dos") -> int:
         suma += sumar(suma, num)
     
 
-print(tokenize("Dos mil trescientos cuarenta y cinco"))
-print(tokenize("doce mil trescientos cuatro millones seiscientos cincuenta y seis mil ciento dieciséis"))
+def main():
+    number = input()
+    tok = tokenize(number)
+    suma = 0
+    tmp = 0
+    for num_list in tok:
+        for i in range(len(num_list)):
+            if num_list[i] == num_list[-1]:
+                if num_list[i] in millares:
+                    if tmp:
+                        tmp = multiplica_millar(tmp, num_list[i])
+                    else:
+                        tmp = multiplica_millar(1, num_list[i])
+                    if num_list[i] != "mil":
+                        suma += tmp
+                        tmp = 0
+                else:
+                    tmp += string_to_int(num_list[i])
+            else:
+                num = string_to_int(num_list[i])
+                tmp += num
+    if tmp:
+        suma += tmp
+    return suma
+
+print(main())
