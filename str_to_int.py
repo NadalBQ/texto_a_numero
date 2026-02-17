@@ -74,6 +74,21 @@ def multiplica_millar(num, millar):
         return num * 10**36
     if millar == "septillon":
         return num * 10**42
+    
+    if millar == "millón":
+        return num * 10**6
+    if millar == "billón":
+        return num * 10**12
+    if millar == "trillón":
+        return num * 10**18
+    if millar == "cuatrillón":
+        return num * 10**24
+    if millar == "quintillón":
+        return num * 10**30
+    if millar == "sextillón":
+        return num * 10**36
+    if millar == "septillón":
+        return num * 10**42
 
 
 def string_to_int(string:str) -> int:
@@ -88,16 +103,6 @@ def string_to_int(string:str) -> int:
         else:
             return number_set[tmp[0]] + number_set[tmp[1]] # treinta + cinco (30 + 5)
 
-
-def find_number_name(string:str = "Dos") -> int:
-    string = string.lower()
-    numeros = string.split(" ")
-    numeros = numeros[::-1]
-    suma = 0
-    for numero in numeros:
-        num = string_to_int(numero)
-        suma += sumar(suma, num)
-    
 
 def main():
     number = input()
