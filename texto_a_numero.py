@@ -49,19 +49,18 @@ def _split(string):
                     break
             break
     if not dec:
+        uni = False
         for unidad in unidades:
             if string.startswith(unidad):
                 tmp.append(unidad)
                 string = string[len(unidad):]
                 string = _strip(string)
+                uni = True
                 break
+        if not uni:
+            string = _strip(string)
     tmp.append(string)
     return tmp
-
-
-def _sumar(*args) -> int:
-    respuesta = sum(args)
-    return respuesta
 
 
 def _multiplica_millar(num, millar):
@@ -108,41 +107,42 @@ def _string_to_int(string:str) -> int:
         if tmp[0] in unidades:
             return number_set[tmp[0]] * number_set[tmp[1]] # dos * cientos (2 * 100)
         else:
+            if tmp[0] in centenas:
+                return number_set[tmp[0]] # ciento cuatro (100 + 4)
             return number_set[tmp[0]] + number_set[tmp[1]] # treinta + cinco (30 + 5)
 
 
 def main():
     number = input()
-    try:
-        tok = _tokenize(number)
-        suma = 0
-        tmp = 0
-        for num_list in tok:
-            for i in range(len(num_list)):
-                if num_list[i] in operadores:
-                    continue
-                
-                if i == (len(num_list) - 1):
-                    if num_list[i] not in unidades:
-                        num_list[i] = _strip(num_list[i])
-                    if num_list[i] in millares:
-                        if tmp:
-                            tmp = _multiplica_millar(tmp, num_list[i])
-                        else:
-                            tmp = _multiplica_millar(1, num_list[i])
-                        if num_list[i] != "mil":
-                            suma += tmp
-                            tmp = 0
+    tok = _tokenize(number)
+    suma = 0
+    tmp = 0
+    for num_list in tok:
+        for i in range(len(num_list)):
+            if num_list[i] in operadores:
+                continue
+            
+            if i == (len(num_list) - 1):
+                if num_list[i] not in unidades:
+                    num_list[i] = _strip(num_list[i])
+                if num_list[i] in millares:
+                    if tmp:
+                        tmp = _multiplica_millar(tmp, num_list[i])
                     else:
-                        tmp += _string_to_int(num_list[i])
+                        tmp = _multiplica_millar(1, num_list[i])
+                    if num_list[i] != "mil":
+                        suma += tmp
+                        tmp = 0
                 else:
-                    num = _string_to_int(num_list[i])
-                    tmp += num
-        if tmp:
-            suma += tmp
-        return suma
-    except Exception as e:
-        return "Ha habido un problema, consulta con el desarrollador: " + e
+                    tmp += _string_to_int(num_list[i])
+            else:
+                num = _string_to_int(num_list[i])
+                tmp += num
+    if tmp:
+        suma += tmp
+    return suma
+
+
 
 if __name__ == "__main__":
     print(main())
