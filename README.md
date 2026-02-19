@@ -123,3 +123,4 @@ Por ejemplo:
 Las contribuciones son bienvenidas. Puedes abrir un issue o enviar un pull request con mejoras o correcciones.
 
 Si deseas soporte para otros idiomas, consulta el proyecto general de conversión multilingüe:
+[numtext](https://github.com/NadalBQ/numtext)
