@@ -14,7 +14,7 @@ def _tokenize(string: str) -> list:
     for word in words:
         for operador in operadores:
             if word.endswith(operador):
-                if word in centenas or word in millares:
+                if word[:-len(operador)] in centenas or word[:-len(operador)] in millares:
                     word = word[:-len(operador)]
             elif word == operador:
                 word = ""
@@ -106,10 +106,7 @@ def _string_to_int(string:str) -> int:
         tmp = _split(string)
         if tmp[0] in unidades:
             return number_set[tmp[0]] * number_set[tmp[1]] # dos * cientos (2 * 100)
-        else:
-            if tmp[0] in centenas:
-                return number_set[tmp[0]] # ciento cuatro (100 + 4)
-            return number_set[tmp[0]] + number_set[tmp[1]] # treinta + cinco (30 + 5)
+        return number_set[tmp[0]] + number_set[tmp[1]] # treinta + cinco (30 + 5)
 
 
 def main():
