@@ -118,10 +118,11 @@ def _string_to_int(string: str) -> int:
         return number_set[tmp[0]] + number_set[tmp[1]] # treinta + cinco (30 + 5)
 
 
-def main() -> int:
+def main(string: str = None) -> int:
     '''Pide por consola un número en lenguaje natural, lo procesa y devuelve su forma numérica'''
-    number = input()
-    tok = _tokenize(number) # Separa las palabras para trabajar una por una
+    if not string:
+        string = input()
+    tok = _tokenize(string) # Separa las palabras para trabajar una por una
     suma = 0
     tmp = 0
     for num_list in tok: # Itera por cada grupo de millares en el número
@@ -152,4 +153,10 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    print(main())
+    import sys
+    args = sys.argv[1:]
+    if args:
+        args = " ".join(args)
+        print(main(args))
+    else:
+        print(main())
